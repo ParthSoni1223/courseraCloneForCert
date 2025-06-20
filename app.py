@@ -54,21 +54,26 @@ def load_default_certificate():
         else:
             return None
     except Exception as e:
-        st.error(f"Error loading default certificate: {e}")
         return None
 
 # Custom CSS for exact Coursera styling
 st.markdown("""
 <style>
+    /* Hide Streamlit default elements */
     .main > div {
         padding-top: 0rem;
     }
+    
+    #MainMenu {visibility: hidden;}
+    footer {visibility: hidden;}
+    header {visibility: hidden;}
     
     .main-header {
         background: #0056D3;
         padding: 12px 0;
         margin: -1rem -1rem 0rem -1rem;
         position: relative;
+        z-index: 100;
     }
     
     .header-content {
@@ -84,7 +89,7 @@ st.markdown("""
         color: white;
         font-size: 28px;
         font-weight: bold;
-        font-family: 'OpenSans', sans-serif;
+        font-family: 'Source Sans Pro', sans-serif;
     }
     
     .header-nav {
@@ -139,6 +144,7 @@ st.markdown("""
         max-width: 1200px;
         margin: 0 auto;
         padding: 40px 24px;
+        background: white;
     }
     
     .breadcrumb {
@@ -156,6 +162,23 @@ st.markdown("""
         line-height: 1.1;
     }
     
+    .completion-section {
+        display: flex;
+        gap: 40px;
+        margin-bottom: 40px;
+        align-items: flex-start;
+    }
+    
+    .completion-left {
+        flex: 2;
+    }
+    
+    .completion-right {
+        flex: 1;
+        position: sticky;
+        top: 20px;
+    }
+    
     .completion-banner {
         background: linear-gradient(135deg, #e8f4fd 0%, #d1e7f8 100%);
         border-radius: 8px;
@@ -165,17 +188,6 @@ st.markdown("""
         display: flex;
         align-items: flex-start;
         gap: 24px;
-    }
-    
-    .completion-left {
-        flex: 1;
-    }
-    
-    .completion-right {
-        flex: 1;
-        display: flex;
-        justify-content: center;
-        align-items: center;
     }
     
     .completion-header {
@@ -221,6 +233,21 @@ st.markdown("""
         font-size: 16px;
         color: #666;
         line-height: 1.5;
+    }
+    
+    .certificate-container {
+        background: white;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        max-width: 100%;
+    }
+    
+    .certificate-image {
+        width: 100%;
+        height: auto;
+        display: block;
+        border-radius: 8px;
     }
     
     .specialization-card {
@@ -398,94 +425,18 @@ st.markdown("""
         cursor: pointer;
     }
     
-    .certificate-preview {
-        border: 1px solid #d1d1d1;
-        border-radius: 8px;
-        overflow: hidden;
-        background: white;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        max-width: 400px;
-    }
-    
-    .certificate-image {
-        width: 100%;
-        height: auto;
-        display: block;
-    }
-    
-    .upload-placeholder {
-        padding: 80px 20px;
-        text-align: center;
-        background: #f8f9fa;
-        border: 2px dashed #dee2e6;
-        border-radius: 8px;
-        color: #6c757d;
-        max-width: 400px;
-    }
-    
-    .upload-icon {
-        font-size: 64px;
-        margin-bottom: 20px;
-        color: #dee2e6;
-    }
-    
-    .upload-text {
-        font-size: 18px;
-        margin-bottom: 8px;
-        font-weight: 500;
-    }
-    
-    .upload-subtext {
-        font-size: 14px;
-        color: #6c757d;
-    }
-    
-    .certificate-status {
-        background: #d4edda;
-        border: 1px solid #c3e6cb;
-        color: #155724;
-        padding: 12px 20px;
-        border-radius: 4px;
-        margin-bottom: 20px;
-        font-size: 14px;
-        text-align: center;
-        max-width: 400px;
-    }
-    
-    .two-column-layout {
-        display: flex;
-        gap: 60px;
-        align-items: flex-start;
-        margin-top: 40px;
-    }
-    
-    .left-content {
-        flex: 2;
-    }
-    
-    .right-content {
-        flex: 1;
-        position: sticky;
-        top: 20px;
-    }
-    
     @media (max-width: 1024px) {
-        .two-column-layout {
+        .completion-section {
             flex-direction: column;
-            gap: 40px;
+            gap: 30px;
         }
         
-        .right-content {
+        .completion-right {
             position: static;
         }
         
         .specialization-title {
             font-size: 36px;
-        }
-        
-        .completion-banner {
-            flex-direction: column;
-            text-align: center;
         }
     }
     
@@ -513,6 +464,11 @@ st.markdown("""
         .skill-tag {
             font-size: 12px;
             padding: 6px 12px;
+        }
+        
+        .completion-banner {
+            flex-direction: column;
+            text-align: center;
         }
     }
 </style>
@@ -543,7 +499,7 @@ st.markdown(f"""
 </div>
 """, unsafe_allow_html=True)
 
-# Main content
+# Main content container
 st.markdown('<div class="main-content">', unsafe_allow_html=True)
 
 # Breadcrumb
@@ -552,16 +508,16 @@ st.markdown('<div class="breadcrumb">Specialization Certificate</div>', unsafe_a
 # Specialization title
 st.markdown('<h1 class="specialization-title">Healthcare Organization Operations</h1>', unsafe_allow_html=True)
 
-# Two column layout starts here
-st.markdown('<div class="two-column-layout">', unsafe_allow_html=True)
+# Main completion section with two columns
+st.markdown('<div class="completion-section">', unsafe_allow_html=True)
 
-# Left content
-st.markdown('<div class="left-content">', unsafe_allow_html=True)
+# Left column - Completion banner and course info
+st.markdown('<div class="completion-left">', unsafe_allow_html=True)
 
 # Completion banner
 st.markdown(f"""
 <div class="completion-banner">
-    <div class="completion-left">
+    <div>
         <div class="completion-header">
             <div class="checkmark">✓</div>
             <div class="completion-text">Completed by {YOUR_NAME}</div>
@@ -655,54 +611,30 @@ for course in courses:
     </div>
     """, unsafe_allow_html=True)
 
-st.markdown('</div>', unsafe_allow_html=True)  # Close left content
+st.markdown('</div>', unsafe_allow_html=True)  # Close left column
 
-# Right content - Certificate
-st.markdown('<div class="right-content">', unsafe_allow_html=True)
+# Right column - Certificate
+st.markdown('<div class="completion-right">', unsafe_allow_html=True)
 
 # Certificate display logic
 certificate_to_display = None
-display_message = ""
 
 if certificate_option == "Use Default Certificate":
     certificate_to_display = load_default_certificate()
-    if certificate_to_display:
-        display_message = "✅ Default Certificate Loaded"
-    else:
-        display_message = "⚠️ Default certificate not found"
 elif uploaded_certificate is not None:
     try:
         certificate_to_display = Image.open(uploaded_certificate)
-        display_message = "✅ Custom Certificate Uploaded"
     except Exception as e:
-        display_message = f"❌ Error loading uploaded certificate: {e}"
+        certificate_to_display = None
 
-# Show certificate status
-if display_message:
-    st.markdown(f'<div class="certificate-status">{display_message}</div>', unsafe_allow_html=True)
-
-st.markdown('<div class="certificate-preview">', unsafe_allow_html=True)
-
-# Display certificate or placeholder
+# Display certificate without any status messages
 if certificate_to_display is not None:
-    st.image(certificate_to_display, use_column_width=True, caption=f"{YOUR_NAME}'s Healthcare Organization Operations Certificate")
-else:
-    # Show placeholder when no certificate is available
-    placeholder_text = "Upload Your Certificate" if certificate_option == "Upload New Certificate" else "Default Certificate Not Found"
-    placeholder_subtext = "Use the sidebar to upload your certificate PNG file" if certificate_option == "Upload New Certificate" else f"Please check if {DEFAULT_CERTIFICATE_PATH} exists in the app folder"
-    
-    st.markdown(f"""
-    <div class="upload-placeholder">
-        <div class="upload-icon">📜</div>
-        <div class="upload-text">{placeholder_text}</div>
-        <div class="upload-subtext">{placeholder_subtext}</div>
-    </div>
-    """, unsafe_allow_html=True)
+    st.markdown('<div class="certificate-container">', unsafe_allow_html=True)
+    st.image(certificate_to_display, use_column_width=True)
+    st.markdown('</div>', unsafe_allow_html=True)
 
-st.markdown('</div>', unsafe_allow_html=True)  # Close certificate preview
-
-st.markdown('</div>', unsafe_allow_html=True)  # Close right content
-st.markdown('</div>', unsafe_allow_html=True)  # Close two-column layout
+st.markdown('</div>', unsafe_allow_html=True)  # Close right column
+st.markdown('</div>', unsafe_allow_html=True)  # Close completion section
 st.markdown('</div>', unsafe_allow_html=True)  # Close main content
 
 # Footer
@@ -721,7 +653,7 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-# Additional features
+# Sidebar info (kept minimal to not interfere with main design)
 st.sidebar.markdown("---")
 st.sidebar.markdown("### 📋 Quick Info")
 st.sidebar.info(f"""
